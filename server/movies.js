@@ -5,22 +5,26 @@ require('dotenv').config();
 const { TMDB_KEY } = process.env;
 
 
-movieRouter.get('/', (req, res) => {
+movieRouter.get('/', async (req, res) => {
+  const { title } = req.query;
+  console.log(title);
   const options = {
     params: {
       api_key: TMDB_KEY,
-    }
-  }
-  axios.get('https://api.themoviedb.org/3/movie/550', options)
-  .then(data => {
+      query: 'fight club',
+    },
+  };
+  
+  try{
+    const data = await axios.get('https://api.themoviedb.org/3/search/movie', options)
     console.log(data.data);
-    res.status(200).send(data.data)
+    res.status(200).send(data.data);
 
-  })
-  .catch(err => {
+  } catch(err) {
     console.log(err);
     res.status(500).send(err);
-  });
+
+  }
 });
 
 module.exports = {
