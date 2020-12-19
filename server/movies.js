@@ -3,6 +3,7 @@ const axios = require('axios');
 const movieRouter = express.Router();
 require('dotenv').config();
 const { TMDB_KEY } = process.env;
+const { pool } = require('../database/index')
 
 
 movieRouter.get('/', async (req, res) => {
@@ -14,7 +15,7 @@ movieRouter.get('/', async (req, res) => {
       query: 'fight club',
     },
   };
-  
+
   try{
     const data = await axios.get('https://api.themoviedb.org/3/search/movie', options)
     console.log(data.data);
