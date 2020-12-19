@@ -1,10 +1,10 @@
 const express = require('express');
 const axios = require('axios');
-const movieRouter = express.Router();
 require('dotenv').config();
-const { TMDB_KEY } = process.env;
-const { pool } = require('../database/index')
+const { pool } = require('../database/index');
 
+const movieRouter = express.Router();
+const { TMDB_KEY } = process.env;
 
 movieRouter.get('/', async (req, res) => {
   const { title } = req.query;
@@ -16,18 +16,16 @@ movieRouter.get('/', async (req, res) => {
     },
   };
 
-  try{
-    const data = await axios.get('https://api.themoviedb.org/3/search/movie', options)
+  try {
+    const data = await axios.get('https://api.themoviedb.org/3/search/movie', options);
     console.log(data.data);
     res.status(200).send(data.data);
-
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     res.status(500).send(err);
-
   }
 });
 
 module.exports = {
   movieRouter,
-}
+};

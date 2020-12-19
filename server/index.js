@@ -1,8 +1,9 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 require('dotenv').config();
 const { movieRouter } = require('./movies');
 const { userRouter } = require('./users');
-const bodyParser = require('body-parser');
+
 const { PORT } = process.env;
 const app = express();
 app.use(bodyParser.json());
