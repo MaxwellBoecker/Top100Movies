@@ -11,35 +11,41 @@ const authRouter = express.Router();
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: 'https://localhost:8000/auth/google/callback',
+  callbackURL: 'http://localhost:8008/auth/google/callback',
 },
 ((accessToken, refreshToken, profile, done) => {
   // select from users where id =
-  pool.query('select * from users', (err, resp) => {
+  // console.log(profile);
+  const { id, displayName } = profile;
+  const email = profile.emails[0].value;
+  pool.query('select * from users where google_id = ($1)', [id], (err, resp) => {
     if (err) {
-      console.log(err);
       done(err);
+    } else if (resp.rows.length === 0) {
+      pool.query('insert into users (google_id, name, email) values ($1, $2, $3)', [id, displayName, email], (err, resp) => {
+        console.log(resp, err);
+        done(null, id);
+      });
     } else {
-      console.log(resp.rows);
-      done(null, resp.rows);
+      console.log('in here');
+      done(null, id);
     }
   });
-  done();
 })));
 
 // auth routes in the auth router
 authRouter.get(
   '/google',
   passport.authenticate('google', {
-    scope: ['profile'],
+    scope: ['profile', 'email'],
   }),
 );
 
 authRouter.get(
-  '/google/redirect',
+  '/google/callback',
   passport.authenticate('google'),
   (req, res) => {
-    res.redirect('/UserProfile');
+    res.redirect('/movielist');
   },
 );
 
