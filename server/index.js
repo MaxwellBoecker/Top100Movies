@@ -10,9 +10,10 @@ const { authRouter } = require('./auth');
 const { PORT } = process.env;
 const app = express();
 app.use(bodyParser.json());
-app.get('/', (req, res) => {
-  res.status(200).send('You have reached the server');
-});
+app.use('/', express.static(path.join(__dirname, '../build')));
+// app.get('/', (req, res) => {
+//   res.status(200).send('You have reached the server');
+// });
 // app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 // app.get('/auth/google/callback',
 //   passport.authenticate('google', { failureRedirect: '/login' }),
@@ -22,7 +23,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRouter);
 app.use('/movies', movieRouter);
 app.use('/users', userRouter);
-
+app.use('*', express.static(path.join(__dirname, '../build/index.html')));
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
 });
