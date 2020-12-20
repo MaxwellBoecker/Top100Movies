@@ -11,6 +11,18 @@ const { PORT } = process.env;
 const app = express();
 app.use(bodyParser.json());
 app.use('/', express.static(path.join(__dirname, '../build')));
+
+passport.serializeUser((id, done) => {
+  console.log(id, 'yolo');
+  done(null, { id });
+});
+passport.deserializeUser((id, done) => {
+  //sql query in here
+  console.log('in here deser')
+  done(null, id);
+});
+app.use(passport.initialize());
+app.use(passport.session());
 // app.get('/', (req, res) => {
 //   res.status(200).send('You have reached the server');
 // });
