@@ -20,5 +20,6 @@ module.exports = {
   ],
   rules: {
     camelcase: 'off',
+    'import/extensions': 'off',
   },
 };
