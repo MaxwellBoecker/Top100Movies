@@ -6,6 +6,8 @@ import {
   Link,
 } from 'react-router-dom';
 import Login from './Login.jsx';
+import Logout from './Logout.jsx';
+import Profile from './Profile.jsx';
 
 const App = () => (
   // <div style={ {color: 'white' } }>Welcome to Top 100 movies </div>
@@ -22,8 +24,12 @@ const App = () => (
         </ul>
       </nav>
       <Switch>
+        <Route path="/profile">
+          <Profile />
+        </Route>
         <Route path="/">
           <Login />
+          <Logout />
         </Route>
       </Switch>
     </div>

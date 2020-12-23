@@ -23,11 +23,9 @@ passport.use(new GoogleStrategy({
       done(err);
     } else if (resp.rows.length === 0) {
       pool.query('insert into users (google_id, name, email) values ($1, $2, $3)', [id, displayName, email], (err, resp) => {
-        console.log(resp, err);
         done(null, id);
       });
     } else {
-      console.log('in here');
       done(null, id);
     }
   });
@@ -51,7 +49,6 @@ authRouter.get(
 
 authRouter.get('/logout', (req, res) => {
   req.logOut();
-  req.session.destroy();
   res.redirect('/');
 });
 
