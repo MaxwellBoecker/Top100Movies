@@ -2,8 +2,16 @@ const express = require('express');
 require('dotenv').config();
 const { pool } = require('../database/index');
 
+const isLoggedIn = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    res.sendStatus(401);
+  }
+};
 const userRouter = express.Router();
-userRouter.get('/', (req, res) => {
+
+userRouter.get('/', isLoggedIn, (req, res) => {
   pool.query('select * from users', (err, resp) => {
     if (err) {
       console.log(err);
@@ -13,6 +21,8 @@ userRouter.get('/', (req, res) => {
       res.status(200).send(resp.rows);
     }
   });
+
+  // res.status(401).send('unauthorized');
 });
 
 // userRouter.post('/', (req, res) => {
