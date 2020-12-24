@@ -6,8 +6,7 @@ const Profile = () => {
   useEffect(async () => {
     axios.get('/users')
       .then((resp) => {
-        console.log(resp.data);
-        
+        setName(resp.data[0].name);
       })
       .catch((err) => {
         console.log(err);
@@ -15,8 +14,7 @@ const Profile = () => {
   });
   return (
     <div style={{ color: 'white' }}>
-      <div>{name} this is my name</div>
-
+      <div>{name} is my name</div>
     </div>
   );
 };
