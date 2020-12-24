@@ -8,11 +8,10 @@ const { TMDB_KEY } = process.env;
 
 movieRouter.get('/', async (req, res) => {
   const { title } = req.query;
-  console.log(title);
   const options = {
     params: {
       api_key: TMDB_KEY,
-      query: 'fight club',
+      query: title,
     },
   };
 

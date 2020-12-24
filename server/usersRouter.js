@@ -12,7 +12,9 @@ const isLoggedIn = (req, res, next) => {
 const userRouter = express.Router();
 
 userRouter.get('/', isLoggedIn, (req, res) => {
-  pool.query('select * from users', (err, resp) => {
+  console.log(req.user);
+  const { id } = req.user;
+  pool.query('select * from users where google_id = ($1)', [id], (err, resp) => {
     if (err) {
       console.log(err);
       res.status(500).send(err);
