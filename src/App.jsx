@@ -5,8 +5,6 @@ import {
   Route,
   Link,
 } from 'react-router-dom';
-import Login from './Login.jsx';
-import Logout from './Logout.jsx';
 import Profile from './Profile.jsx';
 
 const App = () => (
@@ -14,22 +12,22 @@ const App = () => (
   <Router>
     <div style={{ color: 'white' }}>
       <nav>
-        <ul>
-          <li>
-            <Link to="/profile">Profile</Link>
-          </li>
-          <li>
-            <Link to="/movielist">Movies</Link>
-          </li>
-        </ul>
+        <span style={{ paddingRight: '8px' }}>
+          <Link to="/profile">Profile</Link>
+        </span>
+        <span style={{ paddingRight: '8px' }}>
+          <Link to="/movielist">Movies</Link>
+        </span>
+        <span style={{ paddingRight: '8px' }}>
+          <a href="/auth/google">Log In</a>
+        </span>
+        <span style={{ paddingRight: '8px' }}>
+          <a href="/auth/logout">Log Out</a>
+        </span>
       </nav>
       <Switch>
         <Route path="/profile">
           <Profile />
-        </Route>
-        <Route path="/">
-          <Login />
-          <Logout />
         </Route>
       </Switch>
     </div>
