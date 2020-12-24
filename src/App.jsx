@@ -6,6 +6,7 @@ import {
   Link,
 } from 'react-router-dom';
 import Profile from './Profile.jsx';
+import Search from './Search.jsx';
 
 const App = () => (
   // <div style={ {color: 'white' } }>Welcome to Top 100 movies </div>
@@ -24,10 +25,16 @@ const App = () => (
         <span style={{ paddingRight: '8px' }}>
           <a href="/auth/logout">Log Out</a>
         </span>
+        <span style={{ paddingRight: '8px' }}>
+          <Link to="/search">Search</Link>
+        </span>
       </nav>
       <Switch>
         <Route path="/profile">
           <Profile />
+        </Route>
+        <Route path="/search">
+          <Search />
         </Route>
       </Switch>
     </div>
