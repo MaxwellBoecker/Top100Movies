@@ -4,29 +4,20 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const passport = require('passport');
 const cookieSession = require('cookie-session');
-const { movieRouter } = require('./movies');
-const { userRouter } = require('./users');
-const { authRouter } = require('./auth');
+const { movieRouter } = require('./moviesRouter');
+const { userRouter } = require('./usersRouter');
+const { authRouter } = require('./authRouter');
 const { pool } = require('../database');
 
 const { PORT } = process.env;
 const app = express();
 app.use(bodyParser.json());
-app.use('/', express.static(path.join(__dirname, '../build')));
 app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000,
   keys: ['id'],
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-const isLoggedIn = (req, res, next) => {
-  if (req.user) {
-    next();
-  } else {
-    res.sendStatus(401);
-  }
-};
 
 passport.serializeUser((id, done) => {
   done(null, { id });
@@ -43,6 +34,7 @@ passport.deserializeUser((id, done) => {
   });
 });
 
+app.use('/', express.static(path.join(__dirname, '../build')));
 app.use('/auth', authRouter);
 app.use('/movies', movieRouter);
 app.use('/users', userRouter);
@@ -52,5 +44,4 @@ app.listen(PORT, () => {
 });
 
 module.exports = {
-  isLoggedIn,
 };
