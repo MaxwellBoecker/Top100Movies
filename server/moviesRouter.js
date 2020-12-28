@@ -25,6 +25,24 @@ movieRouter.get('/', async (req, res) => {
   }
 });
 
+movieRouter.post('/', (req, res) => {
+  console.log(req.body);
+  const {
+    title, original_language, overview, poster_path, backdrop_path,
+  } = req.body.data;
+  pool.query('insert into movies (title, original_language, overview, poster_path, backdrop_path) values ($1, $2, $3, $4, $5) returning id',
+    [title, original_language, overview, poster_path, backdrop_path], (err, resp) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        console.log(resp.rows);
+        res.status(201).send(resp.rows);
+      }
+    });
+  // res.status(201).send('success!');
+});
+
 module.exports = {
   movieRouter,
 };
