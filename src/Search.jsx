@@ -24,6 +24,15 @@ const Search = () => {
     setSearchTerm('');
   };
 
+  const addFavoriteMovie = (options) => {
+    console.log(options);
+    axios.post('/movies', {
+      data: options,
+    })
+      .then((resp) => console.log(resp.data))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="search">
       <form onSubmit={handleSubmit}>
@@ -37,7 +46,7 @@ const Search = () => {
         <input type="submit" value="Submit" />
       </form>
       <div>
-        {searchResults.map((r, i) => <SearchResult key={i} movieInfo={r} />)}
+        {searchResults.map((r, i) => <SearchResult key={i} movieInfo={r} addFavoriteMovie={addFavoriteMovie} />)}
       </div>
     </div>
   );
