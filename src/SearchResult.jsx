@@ -1,16 +1,29 @@
+/* eslint-disable react/button-has-type */
 import React from 'react';
 
 const SearchResult = (props) => {
-  const { movieInfo } = props;
+  const { movieInfo, addFavoriteMovie } = props;
   const {
-    title, original_language, overview, release_date,
+    title, original_language, overview, release_date, poster_path, backdrop_path,
   } = movieInfo;
+
   return (
     <div className="search-result" style={{ color: 'white' }}>
-      <div>{title}</div>
-      <div>{original_language}</div>
-      <div>{release_date}</div>
+      <div style={{ color: 'purple' }}>{title}</div>
+      <div style={{ color: 'red' }}>{original_language}</div>
+      <div style={{ color: 'goldenrod' }}>{release_date}</div>
       <p>{overview}</p>
+      <button onClick={() => addFavoriteMovie({
+        title,
+        original_language,
+        overview,
+        release_date,
+        poster_path,
+        backdrop_path,
+      })}
+      >
+        Add as a Favorite!
+      </button>
     </div>
   );
 };
