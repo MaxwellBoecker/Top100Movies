@@ -19,7 +19,7 @@ userMovieRouter.post('/', (req, res) => {
   const {
     title, original_language, overview, poster_path, backdrop_path, id,
   } = req.body.data;
-  console.log(req.user);
+  let movieId;
 
   pool.query(
     `WITH cte AS (
@@ -40,9 +40,25 @@ userMovieRouter.post('/', (req, res) => {
         console.log(err, 'err');
         res.status(500).send(err);
       } else {
-        console.log(resp.rows, 'rows');
-
-        // res.status(201).send(resp.rows);
+        movieId = resp.rows[0].result;
+        pool.query('select * from users where google_id = $1', [req.user.id], (err, resp) => {
+          if (err) {
+            console.log(err, 'err');
+            res.status(500).send(err);
+          } else {
+            console.log(resp.rows[0].id);
+            pool.query(`
+            INSERT INTO user_movie (user_id, movie_id)
+            values ($1, $2)
+            `, [resp.rows[0].id, movieId], (err, resp) => {
+              if (err) console.log(err);
+              else {
+                console.log('success');
+                res.status(201).send('successfully added to');
+              }
+            });
+          }
+        });
       }
     },
   );
