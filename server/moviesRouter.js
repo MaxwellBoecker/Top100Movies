@@ -6,7 +6,15 @@ const { pool } = require('../database/index');
 const movieRouter = express.Router();
 const { TMDB_KEY } = process.env;
 
-movieRouter.get('/', async (req, res) => {
+const isLoggedIn = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    res.sendStatus(401);
+  }
+};
+
+movieRouter.get('/', isLoggedIn, async (req, res) => {
   const { title } = req.query;
   const options = {
     params: {
@@ -25,23 +33,23 @@ movieRouter.get('/', async (req, res) => {
   }
 });
 
-movieRouter.post('/', (req, res) => {
-  console.log(req.body);
-  const {
-    title, original_language, overview, poster_path, backdrop_path,
-  } = req.body.data;
-  pool.query('insert into movies (title, original_language, overview, poster_path, backdrop_path) values ($1, $2, $3, $4, $5) returning id',
-    [title, original_language, overview, poster_path, backdrop_path], (err, resp) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send(err);
-      } else {
-        console.log(resp.rows);
-        res.status(201).send(resp.rows);
-      }
-    });
-  // res.status(201).send('success!');
-});
+// movieRouter.post('/', isLoggedIn, (req, res) => {
+//   console.log(req.body);
+//   const {
+//     title, original_language, overview, poster_path, backdrop_path, id,
+//   } = req.body.data;
+//   pool.query('insert into movies (title, original_language, overview, poster_path, backdrop_path, movie_id) values ($1, $2, $3, $4, $5, $6) on conflict (movie_id) do nothing returning id',
+//     [title, original_language, overview, poster_path, backdrop_path, id], (err, resp) => {
+//       if (err) {
+//         console.log(err);
+//         res.status(500).send(err);
+//       } else {
+//         console.log(resp.rows);
+//         res.status(201).send(resp.rows);
+//       }
+//     });
+//   // res.status(201).send('success!');
+// });
 
 module.exports = {
   movieRouter,
