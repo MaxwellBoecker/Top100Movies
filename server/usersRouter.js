@@ -27,6 +27,11 @@ userRouter.get('/', isLoggedIn, (req, res) => {
   // res.status(401).send('unauthorized');
 });
 
+// userRouter.post('/movie', (req, res) => {
+
+// })
+
+
 // userRouter.post('/', (req, res) => {
 //   const { name, email, google_id } = req.body;
 

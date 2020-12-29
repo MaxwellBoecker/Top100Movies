@@ -4,7 +4,7 @@ import React from 'react';
 const SearchResult = (props) => {
   const { movieInfo, addFavoriteMovie } = props;
   const {
-    title, original_language, overview, release_date, poster_path, backdrop_path,
+    title, original_language, overview, release_date, poster_path, backdrop_path, id,
   } = movieInfo;
 
   return (
@@ -20,6 +20,7 @@ const SearchResult = (props) => {
         release_date,
         poster_path,
         backdrop_path,
+        id,
       })}
       >
         Add as a Favorite!

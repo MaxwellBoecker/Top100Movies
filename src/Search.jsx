@@ -26,7 +26,7 @@ const Search = () => {
 
   const addFavoriteMovie = (options) => {
     console.log(options);
-    axios.post('/movies', {
+    axios.post('/usermovie', {
       data: options,
     })
       .then((resp) => console.log(resp.data))
