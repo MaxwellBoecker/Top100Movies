@@ -94,7 +94,13 @@ userMovieRouter.post('/', (req, res) => {
 });
 
 userMovieRouter.delete('/', isLoggedIn, (req, res) => {
-  res.status(204).send('you\'ve hit the delete route');
+  pool.query('delete from user_movie where movie_id = ($1)', [req.body.id], (err, resp) => {
+    if (err) {
+      res.status(500).send('problem occurred during deletion');
+    } else {
+      res.status(204).send();
+    }
+  });
 });
 
 module.exports = {
