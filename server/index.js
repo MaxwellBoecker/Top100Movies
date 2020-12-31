@@ -21,16 +21,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((id, done) => {
+  // console.log(id, 'in serialize');
   done(null, { id });
 });
-passport.deserializeUser((id, done) => {
-  pool.query('select * from users where google_id = ($1)', [id], (err, resp) => {
+passport.deserializeUser((user, done) => {
+  const { id } = user;
+  pool.query('select * from users where id = ($1)', [id], (err, resp) => {
     if (err) {
       console.log(err);
       done(err);
     } else {
-      console.log('successfully deserialized');
-      done(null, id);
+      // console.log('successfully deserialized');
+      done(null, user);
     }
   });
 });
