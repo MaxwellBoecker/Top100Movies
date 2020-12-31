@@ -40,19 +40,19 @@ userMovieRouter.post('/', (req, res) => {
   const userId = req.user.id;
 
   pool.query(
-    'select * from movies where movie_id = $1', [id], (err, resp) => {
+    'select * from movies where id = $1', [id], (err, resp) => {
       if (err) {
         console.log(err);
         res.status(500).send('error finding movie');
       } else {
         if (resp.rows.length === 0) {
           pool.query(`
-              INSERT INTO movies (title, original_language, overview, poster_path, backdrop_path, movie_id)
+              insert into movies (id, title, original_language, overview, poster_path, backdrop_path)
               values ($1, $2, $3, $4, $5, $6)
-              ON CONFLICT (movie_id) DO NOTHING
-              RETURNING id
+              on conflict (id) do nothing
+              returning id
            `,
-          [title, original_language, overview, poster_path, backdrop_path, id], (err, resp) => {
+          [id, title, original_language, overview, poster_path, backdrop_path], (err, resp) => {
             if (err) {
               console.log(err, 'err');
               res.status(500).send(err);
@@ -61,6 +61,8 @@ userMovieRouter.post('/', (req, res) => {
               pool.query(`
                     insert into user_movie (user_id, movie_id)
                     values ($1, $2)
+                    on conflict (user_id, movie_id)
+                    do nothing
                     `, [userId, movieId], (err, resp) => {
                 if (err) {
                   console.log(err);
@@ -75,8 +77,10 @@ userMovieRouter.post('/', (req, res) => {
         } else {
           movieId = resp.rows[0].id;
           pool.query(`
-                    INSERT INTO user_movie (user_id, movie_id)
+                    insert into user_movie (user_id, movie_id)
                     values ($1, $2)
+                    on conflict (user_id, movie_id)
+                    do nothing
                     `, [userId, movieId], (err, resp) => {
             if (err) console.log(err);
             else {
