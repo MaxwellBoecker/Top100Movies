@@ -12,14 +12,14 @@ const isLoggedIn = (req, res, next) => {
 const userRouter = express.Router();
 
 userRouter.get('/', isLoggedIn, (req, res) => {
-  console.log(req.user);
   const { id } = req.user;
-  pool.query('select * from users where google_id = ($1)', [id], (err, resp) => {
+  // console.log(req.user, id, 'in user')
+  pool.query('select * from users where id = ($1)', [id], (err, resp) => {
     if (err) {
       console.log(err);
       res.status(500).send(err);
     } else {
-      console.log(resp.rows);
+      // console.log(resp.rows);
       res.status(200).send(resp.rows);
     }
   });

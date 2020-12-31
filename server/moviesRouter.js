@@ -25,7 +25,7 @@ movieRouter.get('/', isLoggedIn, async (req, res) => {
 
   try {
     const data = await axios.get('https://api.themoviedb.org/3/search/movie', options);
-    console.log(data.data);
+    // console.log(data.data);
     res.status(200).send(data.data);
   } catch (err) {
     console.log(err);
