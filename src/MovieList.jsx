@@ -10,8 +10,9 @@ const MovieList = () => {
   }, []);
 
   const deleteUserMovie = async (id) => {
-    const confirmation = await axios.delete('usermovie', { data: { id } });
-    console.log(confirmation);
+    await axios.delete('usermovie', { data: { id } });
+    const newMovies = movies.filter((m) => m.id !== id);
+    setMovies(newMovies);
   };
 
   return (

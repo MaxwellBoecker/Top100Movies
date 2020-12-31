@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 import React from 'react';
 
 const MovieListEntry = (props) => {
@@ -15,8 +16,8 @@ const MovieListEntry = (props) => {
         original language:
         {original_language}
       </div>
-      <button onClick={()=> deleteUserMovie(id)}>
-      Remove from favorites
+      <button onClick={() => deleteUserMovie(id)}>
+        Remove from favorites
       </button>
     </div>
   );
