@@ -15,8 +15,14 @@ const isLoggedIn = (req, res, next) => {
 
 userMovieRouter.get('/', isLoggedIn, (req, res) => {
   pool.query(`
-  select * from user_movie where user_id = $1
-  `, [1], (err, resp) => {
+  with user_movies as (
+    select movie_id
+    from user_movie
+  )
+  select *
+  from movies
+  where id in (select movie_id from user_movies)
+  `, (err, resp) => {
     if (err) {
       console.log(err);
       res.status(500).send('could not insert');
