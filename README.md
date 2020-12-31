@@ -1,3 +1,3 @@
 # Top100Movies
-
-This is a project that I am using to practice writing tests as well as performing back-end CRUD operations with a PostgreSQL database. The next steps are to write tests for all routes and DB functions, eventually tests for the (very basic) front-end as well. Then I will focus on optimizing my queries.
+Top 100 movies allows user to search movies from TMDB and add them to teir list of favorites. They can also remove the movies from favorites. Soon a user search feature will be possible to view other profiles. Also, profile editing and features such as bio will ba available on the profile tab. 
+This is a project that I am using to practice writing tests as well as performing back-end CRUD operations with a PostgreSQL database. And authentication with Google OAuth2. The next steps are to write tests for all routes and DB functions, eventually tests for the (very basic) front-end as well. Then I will focus on optimizing my queries.
