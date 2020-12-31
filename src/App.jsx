@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import Profile from './Profile.jsx';
 import Search from './Search.jsx';
+import MovieList from './MovieList.jsx';
 
 const App = () => (
   // <div style={ {color: 'white' } }>Welcome to Top 100 movies </div>
@@ -35,6 +36,9 @@ const App = () => (
         </Route>
         <Route path="/search">
           <Search />
+        </Route>
+        <Route path="/movielist">
+          <MovieList />
         </Route>
       </Switch>
     </div>
