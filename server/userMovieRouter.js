@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 const express = require('express');
 require('dotenv').config();
 const { pool } = require('../database/index');
@@ -12,56 +13,78 @@ const isLoggedIn = (req, res, next) => {
   }
 };
 
-userMovieRouter.get('/', (req, res) => {
-
+userMovieRouter.get('/', isLoggedIn, (req, res) => {
+  pool.query(`
+  select * from user_movie where user_id = $1
+  `, [1], (err, resp) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send('could not insert');
+    } else {
+      res.status(200).send(resp.rows);
+    }
+  });
 });
+
 userMovieRouter.post('/', (req, res) => {
   const {
     title, original_language, overview, poster_path, backdrop_path, id,
   } = req.body.data;
   let movieId;
+  const userId = req.user.id;
 
   pool.query(
-    `WITH cte AS (
-      INSERT INTO movies (title, original_language, overview, poster_path, backdrop_path, movie_id)
-      values ($1, $2, $3, $4, $5, $6)
-      ON CONFLICT (movie_id) DO NOTHING
-      RETURNING id
-   )
-   SELECT NULL AS result
-   WHERE EXISTS (SELECT 1 FROM cte)
-   UNION ALL
-   SELECT id
-   FROM movies
-   WHERE movie_id = $6
-     AND NOT EXISTS (SELECT 1 FROM cte)`,
-    [title, original_language, overview, poster_path, backdrop_path, id], (err, resp) => {
+    'select * from movies where movie_id = $1', [id], (err, resp) => {
       if (err) {
-        console.log(err, 'err');
-        res.status(500).send(err);
+        console.log(err);
+        res.status(500).send('error finding movie');
       } else {
-        movieId = resp.rows[0].result;
-        pool.query('select * from users where google_id = $1', [req.user.id], (err, resp) => {
-          if (err) {
-            console.log(err, 'err');
-            res.status(500).send(err);
-          } else {
-            console.log(resp.rows[0].id);
-            pool.query(`
-            INSERT INTO user_movie (user_id, movie_id)
-            values ($1, $2)
-            `, [resp.rows[0].id, movieId], (err, resp) => {
-              if (err) console.log(err);
-              else {
-                console.log('success');
-                res.status(201).send('successfully added to');
-              }
-            });
-          }
-        });
+        if (resp.rows.length === 0) {
+          pool.query(`
+              INSERT INTO movies (title, original_language, overview, poster_path, backdrop_path, movie_id)
+              values ($1, $2, $3, $4, $5, $6)
+              ON CONFLICT (movie_id) DO NOTHING
+              RETURNING id
+           `,
+          [title, original_language, overview, poster_path, backdrop_path, id], (err, resp) => {
+            if (err) {
+              console.log(err, 'err');
+              res.status(500).send(err);
+            } else {
+              movieId = resp.rows[0].id;
+              pool.query(`
+                    insert into user_movie (user_id, movie_id)
+                    values ($1, $2)
+                    `, [userId, movieId], (err, resp) => {
+                if (err) {
+                  console.log(err);
+                  res.status(500).send();
+                } else {
+                  console.log('success');
+                  res.status(201).send('successfully added to');
+                }
+              });
+            }
+          });
+        } else {
+          movieId = resp.rows[0].id;
+          pool.query(`
+                    INSERT INTO user_movie (user_id, movie_id)
+                    values ($1, $2)
+                    `, [userId, movieId], (err, resp) => {
+            if (err) console.log(err);
+            else {
+              res.status(201).send('successfully added to user_movie');
+            }
+          });
+        }
       }
     },
   );
+});
+
+userMovieRouter.delete('/', isLoggedIn, (req, res) => {
+  res.status(204).send('you\'ve hit the delete route');
 });
 
 module.exports = {
