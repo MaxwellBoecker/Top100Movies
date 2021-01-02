@@ -96,8 +96,9 @@ userMovieRouter.post('/', (req, res) => {
 });
 
 userMovieRouter.delete('/', isLoggedIn, (req, res) => {
-  pool.query('delete from user_movie where movie_id = ($1)', [req.body.id], (err, resp) => {
+  pool.query('delete from user_movie where (movie_id, user_id) = ($1, $2)', [req.body.id, req.user.id], (err, resp) => {
     if (err) {
+      console.log(err);
       res.status(500).send('problem occurred during deletion');
     } else {
       res.status(204).send();
