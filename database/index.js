@@ -3,14 +3,24 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 const {
-  DATABASE, PASSWORD, USER, HEROKU_HOST, HEROKU_DATABASE
+  DATABASE, PASSWORD, USER, ENV, DATABASE_URL,
 } = process.env;
-const pool = new Pool({
-  user: USER,
-  host: HEROKU_HOST || 'localhost',
-  database: HEROKU_DATABASE || DATABASE,
-  password: PASSWORD,
-});
+let pool;
+if (ENV === 'production') {
+  pool = new Pool({
+    connectionString: DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  });
+} else {
+  pool = new Pool({
+    user: USER,
+    host: 'localhost',
+    database: DATABASE,
+    password: PASSWORD,
+  });
+}
 
 module.exports = {
   pool,
