@@ -20,7 +20,7 @@ passport.use(new GoogleStrategy({
       done(err);
     } else if (resp.rows.length === 0) {
       pool.query('insert into users (google_id, name, email) values ($1, $2, $3) returning id', [id, displayName, email], (err, resp) => {
-        done(null, id);
+        done(null, resp.rows[0].id);
       });
     } else {
       // console.log(id, resp.rows[0].id, 'in config');
