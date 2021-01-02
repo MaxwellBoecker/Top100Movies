@@ -3,11 +3,11 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 const {
-  DATABASE, PASSWORD, HOST, USER, DATABASE_URL, HEROKU_DATABASE
+  DATABASE, PASSWORD, USER, HEROKU_HOST, HEROKU_DATABASE
 } = process.env;
 const pool = new Pool({
   user: USER,
-  host: DATABASE_URL || 'localhost',
+  host: HEROKU_HOST || 'localhost',
   database: HEROKU_DATABASE || DATABASE,
   password: PASSWORD,
 });
