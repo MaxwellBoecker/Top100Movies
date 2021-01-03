@@ -16,6 +16,7 @@ const isLoggedIn = (req, res, next) => {
 
 movieRouter.get('/', isLoggedIn, async (req, res) => {
   const { title } = req.query;
+  console.log(title);
   const options = {
     params: {
       api_key: TMDB_KEY,
@@ -32,24 +33,6 @@ movieRouter.get('/', isLoggedIn, async (req, res) => {
     res.status(500).send(err);
   }
 });
-
-// movieRouter.post('/', isLoggedIn, (req, res) => {
-//   console.log(req.body);
-//   const {
-//     title, original_language, overview, poster_path, backdrop_path, id,
-//   } = req.body.data;
-//   pool.query('insert into movies (title, original_language, overview, poster_path, backdrop_path, movie_id) values ($1, $2, $3, $4, $5, $6) on conflict (movie_id) do nothing returning id',
-//     [title, original_language, overview, poster_path, backdrop_path, id], (err, resp) => {
-//       if (err) {
-//         console.log(err);
-//         res.status(500).send(err);
-//       } else {
-//         console.log(resp.rows);
-//         res.status(201).send(resp.rows);
-//       }
-//     });
-//   // res.status(201).send('success!');
-// });
 
 module.exports = {
   movieRouter,
