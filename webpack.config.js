@@ -1,8 +1,10 @@
+const path = require('path');
+
 module.exports = {
   entry: './src/Index.jsx',
   output: {
     filename: 'app.js',
-    path: __dirname + '/build',
+    path: path.join(__dirname, '/build'),
     publicPath: '/',
   },
   devServer: {
