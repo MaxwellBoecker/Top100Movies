@@ -1,14 +1,18 @@
 /* eslint-disable no-undef */
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../server/index');
+const { app } = require('../server/index');
+const passport = require('passport');
+require('dotenv').config();
 
 const { expect } = chai;
 chai.use(chaiHttp);
 const { testPool } = require('./testDatabaseSetup');
-const { createMoviePromises, createUserPromise, combinePromises, createUserMoviePromises } = require('./testDatabaseSetup/seedingFunctions.js');
+const {
+  createMoviePromises, createUserPromise, combinePromises, createUserMoviePromises,
+} = require('./testDatabaseSetup/seedingFunctions.js');
 
-describe('test database works', () => {
+describe('setting up the test database', () => {
   before('seed database with data', async () => {
     const moviePromises = createMoviePromises();
     const userPromise = createUserPromise();
@@ -48,5 +52,44 @@ describe('test database works', () => {
     testPool.query('select * from user_movie', (err, resp) => {
       expect(resp.rows.length).to.equal(4);
     });
+  });
+});
+
+describe('movies router GET /', () => {
+  let agent;
+  let { NODE_ENV } = process.env;
+  beforeEach(() => {
+    agent = chai.request.agent(app);
+    NODE_ENV = 'test';
+    console.log(NODE_ENV)
+    let strategy = passport._strategies['google'];
+    strategy._profile = {
+      id: '12345',
+      displayName: 'yolo',
+      emails: [{
+        value: 'yes@yes.org',
+      }],
+    };
+  });
+  // after('switch environment to dev', () => {
+  //   NODE_ENV = 'development';
+  // });
+  it('should return 200 status', (done) => {
+    agent
+      .get('/auth/google')
+      .then((res) => {
+        expect(res.status).to.equal(200);
+        agent.get('/movies')
+          .query({ title: 'Fight Club' })
+          .then((res) => {
+            // console.log(res.body)
+            expect(res.status).to.equal(200);
+            done();
+          }).catch((err) => {
+            console.log(err);
+            done(err);
+          });
+      })
+      .catch((err) => console.log(err));
   });
 });
