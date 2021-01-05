@@ -23,5 +23,7 @@ module.exports = {
     'import/extensions': 'off',
     'react/prop-types': 'off',
     'max-len': 'off',
+    'no-underscore-dangle': 'off',
+    'no-shadow': 'off',
   },
 };

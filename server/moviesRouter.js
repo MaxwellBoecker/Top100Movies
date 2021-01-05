@@ -16,7 +16,7 @@ const isLoggedIn = (req, res, next) => {
 
 movieRouter.get('/', isLoggedIn, async (req, res) => {
   const { title } = req.query;
-  console.log(title);
+  // console.log(title);
   const options = {
     params: {
       api_key: TMDB_KEY,
