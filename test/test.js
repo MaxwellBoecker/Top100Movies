@@ -4,6 +4,7 @@ const chaiHttp = require('chai-http');
 const { app } = require('../server/index');
 const passport = require('passport');
 require('dotenv').config();
+const nock = require('nock');
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -11,6 +12,10 @@ const { testPool } = require('./testDatabaseSetup');
 const {
   createMoviePromises, createUserPromise, combinePromises, createUserMoviePromises,
 } = require('./testDatabaseSetup/seedingFunctions.js');
+
+const { TMDB_KEY } = process.env;
+const { tmdbData } = require('./TMDBData/TMDBData');
+const { moviesRouterTests } = require('./unitTests/moviesRouterTests');
 
 describe('setting up the test database', () => {
   before('seed database with data', async () => {
@@ -55,41 +60,4 @@ describe('setting up the test database', () => {
   });
 });
 
-describe('movies router GET /', () => {
-  let agent;
-  let { NODE_ENV } = process.env;
-  beforeEach(() => {
-    agent = chai.request.agent(app);
-    NODE_ENV = 'test';
-    console.log(NODE_ENV)
-    let strategy = passport._strategies['google'];
-    strategy._profile = {
-      id: '12345',
-      displayName: 'yolo',
-      emails: [{
-        value: 'yes@yes.org',
-      }],
-    };
-  });
-  // after('switch environment to dev', () => {
-  //   NODE_ENV = 'development';
-  // });
-  it('should return 200 status', (done) => {
-    agent
-      .get('/auth/google')
-      .then((res) => {
-        expect(res.status).to.equal(200);
-        agent.get('/movies')
-          .query({ title: 'Fight Club' })
-          .then((res) => {
-            // console.log(res.body)
-            expect(res.status).to.equal(200);
-            done();
-          }).catch((err) => {
-            console.log(err);
-            done(err);
-          });
-      })
-      .catch((err) => console.log(err));
-  });
-});
+moviesRouterTests();
