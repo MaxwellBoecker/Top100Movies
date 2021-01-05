@@ -8,6 +8,7 @@ import {
 import Profile from './Profile.jsx';
 import Search from './Search.jsx';
 import MovieList from './MovieList.jsx';
+import LandingPage from './LandingPage.jsx';
 
 const App = () => (
   // <div style={ {color: 'white' } }>Welcome to Top 100 movies </div>
@@ -39,6 +40,9 @@ const App = () => (
         </Route>
         <Route path="/movielist">
           <MovieList />
+        </Route>
+        <Route path="/">
+          <LandingPage />
         </Route>
       </Switch>
     </div>
