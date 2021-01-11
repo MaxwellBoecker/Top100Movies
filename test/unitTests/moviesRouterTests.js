@@ -23,7 +23,9 @@ const moviesRouterTests = () => {
           value: 'yes@yes.org',
         }],
       };
-  
+    });
+
+    it('should return 200 status and correct data for successful GET request', (done) => {
       nock('https://api.themoviedb.org')
         .get('/3/search/movie')
         .query({
@@ -31,16 +33,15 @@ const moviesRouterTests = () => {
           query: 'Fight Club',
         })
         .reply(200, tmdbData);
-    });
-  
-    it('should return 200 status and correct data for successful GET request', (done) => {
       agent.get('/auth/google')
         .then((res) => {
           expect(res.status).to.equal(200);
           agent.get('/movies')
             .query({ title: 'Fight Club' })
             .then((res) => {
-              const { backdrop_path, id, overview, poster_path, title, original_language} = res.body.results[0];
+              const {
+                backdrop_path, id, overview, poster_path, title, original_language,
+              } = res.body.results[0];
               expect(res.status).to.equal(200);
               expect(res.body.results.length).to.equal(1);
               expect(backdrop_path).to.equal('/52AfXWuXCHn3UjD17rBruA9f5qb.jpg');
@@ -57,19 +58,24 @@ const moviesRouterTests = () => {
         })
         .catch((err) => console.log(err));
     });
-    it('should return a 500 error for request without query param title', () => {
+    it('should return a 206 partial content for request without query param title', (done) => {
       agent.get('/auth/google')
-        .then((res) => {
+        .end((err, res) => {
           expect(res.status).to.equal(200);
           agent.get('/movies')
-            .catch((err) => {
-              expect(res.status).to.equal(500);
+            .end((err, res) => {
+              expect(res.status).to.equal(206);
+              expect(res.text).to.be.a('string');
+              // console.log(res);
+              done();
             });
         });
     });
   });
 };
 
+
+
 module.exports = {
   moviesRouterTests,
-}
+};

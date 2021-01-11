@@ -53,11 +53,12 @@ describe('setting up the test database', () => {
       done();
     });
   });
-  it('should contain 4 rows in the user_movie table', () => {
+  it('should contain 4 rows in the user_movie table', (done) => {
     testPool.query('select * from user_movie', (err, resp) => {
       expect(resp.rows.length).to.equal(4);
+      done();
     });
   });
+  moviesRouterTests();
 });
 
-moviesRouterTests();

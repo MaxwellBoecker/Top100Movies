@@ -17,20 +17,24 @@ const isLoggedIn = (req, res, next) => {
 movieRouter.get('/', isLoggedIn, async (req, res) => {
   const { title } = req.query;
   // console.log(title);
-  const options = {
-    params: {
-      api_key: TMDB_KEY,
-      query: title,
-    },
-  };
+  if (title === undefined) {
+    res.status(206).send('please supply a title to search for');
+  } else {
+    const options = {
+      params: {
+        api_key: TMDB_KEY,
+        query: title,
+      },
+    };
 
-  try {
-    const data = await axios.get('https://api.themoviedb.org/3/search/movie', options);
-    // console.log(data.data);
-    res.status(200).send(data.data);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send(err);
+    try {
+      const data = await axios.get('https://api.themoviedb.org/3/search/movie', options);
+      // console.log(data.data);
+      res.status(200).send(data.data);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
   }
 });
 
