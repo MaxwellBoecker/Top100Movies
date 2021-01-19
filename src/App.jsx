@@ -5,32 +5,46 @@ import {
   Route,
   Link,
 } from 'react-router-dom';
+import { AppBar, Button, Toolbar } from '@material-ui/core';
+
 import Profile from './Profile.jsx';
 import Search from './Search.jsx';
 import MovieList from './MovieList.jsx';
 import LandingPage from './LandingPage.jsx';
 
 const App = () => (
-  // <div style={ {color: 'white' } }>Welcome to Top 100 movies </div>
   <Router>
     <div style={{ color: 'white' }}>
-      <nav>
-        <span style={{ paddingRight: '8px' }}>
-          <Link to="/profile">Profile</Link>
-        </span>
-        <span style={{ paddingRight: '8px' }}>
-          <Link to="/movielist">Movies</Link>
-        </span>
-        <span style={{ paddingRight: '8px' }}>
-          <a href="/auth/google">Log In</a>
-        </span>
-        <span style={{ paddingRight: '8px' }}>
-          <a href="/auth/logout">Log Out</a>
-        </span>
-        <span style={{ paddingRight: '8px' }}>
-          <Link to="/search">Search</Link>
-        </span>
-      </nav>
+      <AppBar>
+        <Toolbar>
+          <Link to="/profile">
+            <Button>
+              Profile
+            </Button>
+          </Link>
+          <Link to="/movielist">
+            <Button>
+              My Top Movies
+            </Button>
+          </Link>
+          <Link to="/auth/google">
+            <Button>
+              Log In
+            </Button>
+          </Link>
+          <Link to="/auth/logout">
+            <Button>
+              Log Out
+            </Button>
+          </Link>
+          <Link to="/search">
+            <Button>
+              Search
+            </Button>
+          </Link>
+
+        </Toolbar>
+      </AppBar>
       <Switch>
         <Route path="/profile">
           <Profile />
