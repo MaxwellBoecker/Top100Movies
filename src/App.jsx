@@ -11,6 +11,7 @@ import Profile from './Profile.jsx';
 import Search from './Search.jsx';
 import MovieList from './MovieList.jsx';
 import LandingPage from './LandingPage.jsx';
+import NewMovieListEntry from './newMovieListEntry.jsx';
 
 const App = () => (
   <Router>

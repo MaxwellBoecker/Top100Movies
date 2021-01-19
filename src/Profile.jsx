@@ -13,7 +13,7 @@ const Profile = () => {
       });
   });
   return (
-    <div style={{ color: 'white' }}>
+    <div style={{ color: 'white', paddingTop: '64px' }}>
       <div>{name} is my name</div>
       <div>Go to movies to see my favorite movies!</div>
     </div>
