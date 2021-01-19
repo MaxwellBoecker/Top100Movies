@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MovieListEntry from './MovieListEntry.jsx';
+import NewMovieListEntry from './NewMovieListEntry.jsx';
 
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
@@ -18,7 +19,7 @@ const MovieList = () => {
   return (
     <div>
       <div style={{ color: 'white' }}>
-        {movies.map((m) => <MovieListEntry movieData={m} key={m.id} deleteUserMovie={deleteUserMovie} />)}
+        {movies.map((m, i) => <NewMovieListEntry movieData={m} number={i + 1} key={m.id} deleteUserMovie={deleteUserMovie} />)}
       </div>
     </div>
   );

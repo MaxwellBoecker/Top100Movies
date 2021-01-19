@@ -9,7 +9,7 @@ const MovieListEntry = (props) => {
     title, poster_path, overview, backdrop_path, original_language, id,
   } = movieData;
   return (
-    <div style={{ color: 'white' }}>
+    <div style={{ color: 'white', paddingTop: '64px' }}>
       <div>{title}</div>
       <img alt="movie poster" src={poster_path !== null ? path + poster_path : ''} style={{ width: '15%', height: '15%' }} />
       <div>{overview}</div>
