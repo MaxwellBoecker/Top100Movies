@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/MaxwellBoecker/Top100Movies#readme",
   "dependencies": {
+    "@material-ui/core": "^4.11.2",
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
@@ -40,7 +41,8 @@
     "pg": "^8.5.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "superagent": "^6.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
