@@ -1,5 +1,6 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
+import { Button, Grid } from '@material-ui/core';
 
 const MovieListEntry = (props) => {
   const path = 'https://image.tmdb.org/t/p/original';
@@ -16,9 +17,9 @@ const MovieListEntry = (props) => {
         original language:
         {original_language}
       </div>
-      <button onClick={() => deleteUserMovie(id)}>
+      <Button onClick={() => deleteUserMovie(id)} variant="contained" color="primary">
         Remove from favorites
-      </button>
+      </Button>
     </div>
   );
 };
