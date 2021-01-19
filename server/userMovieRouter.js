@@ -12,10 +12,8 @@ const isLoggedIn = (req, res, next) => {
     res.sendStatus(401);
   }
 };
-
-userMovieRouter.get('/', isLoggedIn, (req, res) => {
-  const { id } = req.user;
-  pool.query(`
+/*
+`
   with user_movies as (
     select movie_id
     from user_movie
@@ -24,10 +22,28 @@ userMovieRouter.get('/', isLoggedIn, (req, res) => {
   select *
   from movies
   where id in (select movie_id from user_movies)
+  `
+*/
+
+/** select * from movies m
+inner join user_movie um
+on um.movie_id = m.id
+inner join users u
+on u.id = um.user_id
+where user_id = 1;
+*/
+userMovieRouter.get('/', isLoggedIn, (req, res) => {
+  const { id } = req.user;
+  pool.query(`select * from movies m
+  inner join user_movie um
+  on um.movie_id = m.id
+  inner join users u
+  on u.id = um.user_id
+  where user_id = ($1)
   `, [id], (err, resp) => {
     if (err) {
       console.log(err);
-      res.status(500).send('could not insert');
+      res.status(500).send('could not select');
     } else {
       res.status(200).send(resp.rows);
     }
