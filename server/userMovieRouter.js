@@ -24,22 +24,27 @@ const isLoggedIn = (req, res, next) => {
   where id in (select movie_id from user_movies)
   `
 */
-
-/** select * from movies m
-inner join user_movie um
-on um.movie_id = m.id
-inner join users u
-on u.id = um.user_id
-where user_id = 1;
-*/
-userMovieRouter.get('/', isLoggedIn, (req, res) => {
-  const { id } = req.user;
-  pool.query(`select * from movies m
+/**
+ * `select * from movies m
   inner join user_movie um
   on um.movie_id = m.id
   inner join users u
   on u.id = um.user_id
   where user_id = ($1)
+  `
+ */
+
+userMovieRouter.get('/', isLoggedIn, (req, res) => {
+  const { id } = req.user;
+  pool.query(`
+  with user_movies as (
+    select movie_id
+    from user_movie
+    where user_id = ($1)
+  )
+  select *
+  from movies
+  where id in (select movie_id from user_movies)
   `, [id], (err, resp) => {
     if (err) {
       console.log(err);
