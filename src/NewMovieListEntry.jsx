@@ -7,7 +7,6 @@ const NewMovieListEntry = (props) => {
   const {
     title, poster_path, overview, backdrop_path, original_language, id,
   } = movieData;
-  console.log(number);
   return (
     <Grid container spacing={2} style={{ paddingTop: '64px', color: 'white' }}>
       <Grid item zeroMinWidth xs={1}>
