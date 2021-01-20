@@ -27,16 +27,12 @@ const App = () => (
               My Top Movies
             </Button>
           </Link>
-          <Link to="/auth/google">
-            <Button>
-              Log In
-            </Button>
-          </Link>
-          <Link to="/auth/logout">
-            <Button>
-              Log Out
-            </Button>
-          </Link>
+          <span style={{ paddingRight: '8px' }}>
+            <a href="/auth/google">Log In</a>
+          </span>
+          <span style={{ paddingRight: '8px' }}>
+            <a href="/auth/logout">Log Out</a>
+          </span>
           <Link to="/search">
             <Button>
               Search
